@@ -20,11 +20,12 @@ public class User {
 
     @Override
     public String toString() {
-        return "{"+"userid='" + userid + '\'' +
-                ", username='" + username + '\'' +
-                ", college='" + college + '\'' +
+        return "{"+"\"userid:\"" +"\""+ userid +"\""+","+
+                "\"username:\"" +"\""+ username +"\""+","+
+                "\"college:\"" +"\""+ college + "\"" +//","+
                 '}';
     }
+
 
     public User(String userid, String username, String college) {
         this.userid = userid;

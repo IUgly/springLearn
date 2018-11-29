@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * 定时任务，每隔5s执行一次操作
  */
-@Component
+//@Component
 public class ScheduledTasks {
     @Autowired
     private Dao dao;
@@ -25,9 +25,6 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime(){
-        User user = new User();
-        user.setUsername(String.valueOf(dateFormat.format(new Date())));
-        this.dao.updateUser(user);
         log.info("The time is now {}", dateFormat.format(new Date()));
     }
 

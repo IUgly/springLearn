@@ -1,7 +1,9 @@
 package team.redrock.test;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
-import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,7 @@ import team.redrock.scheduled.StartSpringBootMain;
 import team.redrock.scheduled.vo.IndividualRankZSet;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import static net.minidev.json.JSONValue.toJSONString;
 
@@ -31,7 +30,7 @@ public class TestDeptService {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    public static final String SCORE_RANK = "test1";
+    public static final String SCORE_RANK = "test1231";
 
     @Test
     public void test() throws Exception {
@@ -52,7 +51,7 @@ public class TestDeptService {
         long start = System.currentTimeMillis();
         Set<ZSetOperations.TypedTuple<String>> individualRankZSetList = new HashSet<>();
         for (int i=0; i< 10000; i++){
-            ZSetOperations.TypedTuple typedTuple = new IndividualRankZSet("201721"+i,2000+i, "计算机");
+            IndividualRankZSet typedTuple = new IndividualRankZSet("201721"+i,2000+i, "计算机");
             individualRankZSetList.add(typedTuple);
         }
         System.out.println("循环时间:" +( System.currentTimeMillis() - start));
@@ -67,12 +66,21 @@ public class TestDeptService {
     @Test
     public void list() {
 
-        Gson gson = new Gson();
-
         Set<String> range = redisTemplate.opsForZSet().reverseRange(SCORE_RANK, 0, 10);
         System.out.println("获取到的排行列表:" + toJSONString(range));
         Set<ZSetOperations.TypedTuple<String>> rangeWithScores = redisTemplate.opsForZSet().reverseRangeWithScores(SCORE_RANK, 0, 10);
-        System.out.println("获取到的排行和分数列表:" + gson.toJson(rangeWithScores));
+        Iterator<ZSetOperations.TypedTuple<String>> it = rangeWithScores.iterator();
+        int start = 0;
+        JSONArray jsonArray = new JSONArray();
+        while (it.hasNext()) {
+            ZSetOperations.TypedTuple str = it.next();
+            System.out.println(str.getValue().toString());
+            com.alibaba.fastjson.JSONObject json = JSONObject.parseObject(str.getValue().toString());
+            json.put("rank", start+1);
+            jsonArray.add(json);
+            start++;
+        }
+        System.out.println("获取到的排行和分数列表:" + JSON.toJSONString(rangeWithScores));
 
     }
 

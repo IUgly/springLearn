@@ -4,11 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import lombok.Data;
 import org.springframework.data.redis.core.ZSetOperations;
 
 import java.util.HashMap;
 import java.util.Map;
 
+
+@Data
 public class IndividualRankZSet implements ZSetOperations.TypedTuple<String> {
     private String stuId;
     private double distance;

@@ -26,6 +26,7 @@ public class IndividualRankZSet implements ZSetOperations.TypedTuple<String> {
     @Override
     public String getValue() {
         User user = new User(this.stuId,"匡俊霖", this.college);
+        System.out.println(user.toString());
         return user.toString();
     }
 

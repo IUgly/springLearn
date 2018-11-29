@@ -20,9 +20,9 @@ public class User {
 
     @Override
     public String toString() {
-        return "{"+"\"userid:\"" +"\""+ userid +"\""+","+
-                "\"username:\"" +"\""+ username +"\""+","+
-                "\"college:\"" +"\""+ college + "\"" +//","+
+        return "{"+"\"userid\":" +"\""+ userid +"\""+","+
+                "\"username\":" +"\""+ username +"\""+","+
+                "\"college\":" +"\""+ college + "\"" +//","+
                 '}';
     }
 

@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import team.redrock.scheduled.StartSpringBootMain;
 import team.redrock.scheduled.vo.IndividualRankZSet;
+import team.redrock.scheduled.vo.User;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -30,7 +31,7 @@ public class TestDeptService {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    public static final String SCORE_RANK = "test1231";
+    public static final String SCORE_RANK = "tedsswqt1wq1";
 
     @Test
     public void test() throws Exception {
@@ -80,7 +81,7 @@ public class TestDeptService {
             jsonArray.add(json);
             start++;
         }
-        System.out.println("获取到的排行和分数列表:" + JSON.toJSONString(rangeWithScores));
+        System.out.println("获取到的排行和分数列表:" + jsonArray.toJSONString());
 
     }
 
@@ -89,18 +90,30 @@ public class TestDeptService {
      */
     @Test
     public void add() {
-        redisTemplate.opsForZSet().add(SCORE_RANK, "张三", 19866);
+        User user = new User("2011212","牛七", "tongxin");
+
+        redisTemplate.opsForZSet().add(SCORE_RANK, user.toString(), 3986);
     }
     /**
      * 获取单个的排行
      */
     @Test
     public void find(){
-        Long rankNum = redisTemplate.opsForZSet().reverseRank(SCORE_RANK, "牛七");
+        User user = new User("2011212","牛七", "tongxin");
+        Long rankNum = redisTemplate.opsForZSet().reverseRank(SCORE_RANK, user.toString());
         System.out.println("牛七的个人排名：" + rankNum);
 
-        Double score = redisTemplate.opsForZSet().score(SCORE_RANK, "牛七");
+
+        Double score = redisTemplate.opsForZSet().score(SCORE_RANK, user.toString());
         System.out.println("牛七的分数:" + score);
+
+
+        Set<ZSetOperations.TypedTuple<String>> range = redisTemplate.opsForZSet().reverseRangeWithScores(SCORE_RANK, rankNum-1, rankNum-1);
+        Iterator<ZSetOperations.TypedTuple<String>> it = range.iterator();
+        while (it.hasNext()) {
+            ZSetOperations.TypedTuple str = it.next();
+            System.out.println("牛七的前一名分数："+str.getScore());
+        }
     }
     /**
      * 统计两个分数之间的人数
